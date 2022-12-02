@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Plant Recognition
+{% endblock %}
+
+{% block content %}
+  <hr />
+  <h1 class="text-center mt-3">Plant Recognition</h1>
+  <p class="text-center" style="font-size: 1.5rem;">Upload the image of plant leaf in order to get it identified.</p>
+  <div class="d-flex justify-content-center align-items-center flex-column">
+    {% if predictions %}
+      <div class="card mb-3 custom-shadow rounded" style="width: 720px;" >
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{url}}" class="img-fluid rounded-start"  style="height: 100%;" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Predictions</h5>
+              <ul class="list-group">
+                {% for prediction in predictions %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      {{prediction.pred}}
+                      <span class="badge bg-{{prediction.color}} rounded-pill">{{prediction.prob}}%</span>
+                    </li>
+                  {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="btn btn-custom d-flex justify-content-center align-items-center mt-3 shadow-lg" style="height: 80px; width: 400px; font-size: 1.5rem; font-weight: 500;" href="{% url 'plantinfo'%}">Predict Again</a>
+    
+    {% else %}
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="plant_leaf" accept="image/*" name="plant_leaf" required>
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <button class="btn btn-custom d-flex justify-content-center align-items-center mt-3 shadow-lg" style="height: 80px; width: 400px; font-size: 1.5rem; font-weight: 500;" type="submit">Upload Image</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

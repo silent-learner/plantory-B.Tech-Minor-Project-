@@ -1,0 +1,64 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  Comment Page
+{% endblock %}
+
+{% block content %}
+<hr>
+  <div class="container p-3">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-3 custom-shadow" style="height: 250px;">
+          <div class="row g-0" style="max-height: 100%;">
+            <div class="col-md-4 p-0">
+              <img src="{{ image }}" class="img-fluid rounded-start w-100" alt="..." style="height: 250px;" />
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title text-muted">{{ user }}</h5>
+                <h3 class="card-text">{{ content }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="container">
+          <div>
+            <form action="" method="POST">
+              {% csrf_token %}
+              <div class="d-flex">
+              <div class="flex-grow-1">
+                <input required autocomplete="off" type="text" class="form-control" placeholder="Enter comment" aria-label="comment" aria-describedby="button-addon" name="comment" />
+              </div>
+              <div>
+                <button class="btn btn-custom" type="submit"><i class="bi bi-telegram"></i></button>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column">
+      {% for comment in comments %}
+        <div>
+          <div class="card custom-shadow">
+            <div class="card-body">
+              {% if request.user.username == comment.user.username %}
+                <h6 class="card-subtitle mb-2 text-muted">Me</h6>
+              {% else %}
+                <h6 class="card-subtitle mb-2 text-muted">{{ comment.user }}</h6>
+              {% endif %}
+              <h5 class="card-title">{{ comment.content }}</h5>
+              <p class="card-text">
+                <small class="text-muted">{{ comment.date_added }}</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
